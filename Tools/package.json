@@ -1,0 +1,14 @@
+﻿{
+  "name": "the-blood-warfare-tools",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "presskit": "node press-kit.cjs",
+    "browser-test": "node browser-test.cjs",
+    "package": "node package.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "sharp": "0.35.5"
+  }
+}

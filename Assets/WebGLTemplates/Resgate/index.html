@@ -1,0 +1,55 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="author" content="Mathias Zanotto">
+  <title>The Blood Warfare</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#16121e;color:#f0e6d2;font-family:Arial,sans-serif}
+    #stage{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+    canvas{display:block;width:min(100vw,160vh);height:min(100vh,62.5vw);outline:none;background:#16121e}
+    #loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 60% 40%,#462338,#16121e);z-index:2}
+    .card{width:min(440px,86vw)}.eyebrow{font-size:12px;letter-spacing:3px;color:#e6c273}h1{font-size:clamp(32px,6vw,52px);margin:15px 0 0;letter-spacing:-2px}h2{color:#e6c273;font-size:18px;letter-spacing:2px;font-weight:500;margin:8px 0 30px}
+    progress{appearance:none;border:0;border-radius:3px;background:#51404f;width:100%;height:7px;display:block}progress::-webkit-progress-bar{background:#51404f}progress::-webkit-progress-value{background:#e6c273}progress::-moz-progress-bar{background:#e6c273}
+    #status{font-size:14px;color:#b6a8b2;line-height:1.6;margin-top:20px}#error{white-space:pre-wrap;color:#ffafa5;display:none;font-size:14px;line-height:1.5}
+    #fullscreen{position:absolute;right:12px;top:10px;z-index:1;border:1px solid #806074;background:#2b2230;color:#e6d0b2;border-radius:3px;padding:7px 10px;font-size:11px;cursor:pointer;opacity:.8}#fullscreen:hover{opacity:1;border-color:#e6c273}button:focus-visible{outline:2px solid #e6c273;outline-offset:3px}
+  </style>
+</head>
+<body>
+  <main id="stage"><canvas id="unity-canvas" width="{{{ WIDTH }}}" height="{{{ HEIGHT }}}" tabindex="0" aria-label="The Blood Warfare"></canvas></main>
+  <button id="fullscreen" type="button" title="Alternar tela cheia">TELA CHEIA</button>
+  <section id="loading" aria-live="polite"><div class="card"><div class="eyebrow">8-BIT / CASTELO SOB CERCO</div><h1>THE BLOOD WARFARE</h1><h2>O CASTELO DOS SEDENTOS</h2><progress id="progress" max="1" value="0"></progress><p id="status">Abrindo os portões…</p><p id="error"></p></div></section>
+  <script src="Build/{{{ LOADER_FILENAME }}}"></script>
+  <script>
+    const canvas=document.getElementById('unity-canvas');
+    const loading=document.getElementById('loading');
+    const progress=document.getElementById('progress');
+    const status=document.getElementById('status');
+    function showError(message){loading.style.display='flex';status.textContent='Não foi possível iniciar o jogo. Recarregue a página para tentar novamente.';const error=document.getElementById('error');error.style.display='block';error.textContent=String(message);console.error(message)}
+    createUnityInstance(canvas,{
+      arguments:[],
+#if PROGRESSIVE_ASSET_LOADING
+      primaryDataUrls:{{{ JSON.stringify(PRIMARY_DATA_FILES) }}},
+      secondaryDataUrls:{{{ JSON.stringify(SECONDARY_DATA_FILES) }}},
+#else
+      dataUrl:'Build/{{{ DATA_FILENAME }}}',
+#endif
+      frameworkUrl:'Build/{{{ FRAMEWORK_FILENAME }}}',
+#if USE_WASM
+      codeUrl:'Build/{{{ CODE_FILENAME }}}',
+#endif
+      streamingAssetsUrl:'StreamingAssets',
+      companyName:{{{ JSON.stringify(COMPANY_NAME) }}},
+      productName:{{{ JSON.stringify(PRODUCT_NAME) }}},
+      productVersion:{{{ JSON.stringify(PRODUCT_VERSION) }}},
+      devicePixelRatio:Math.min(window.devicePixelRatio||1,2),
+      showBanner:(message,type)=>{if(type==='error')showError(message);else console.warn(message)}
+    },value=>{progress.value=value;status.textContent='Abrindo os portões… '+Math.round(value*100)+'%'}).then(instance=>{
+      window.unityInstance=instance;window.gameReady=true;loading.style.display='none';canvas.focus();
+      document.getElementById('fullscreen').onclick=()=>instance.SetFullscreen(document.fullscreenElement?0:1);
+      canvas.addEventListener('pointerdown',()=>canvas.focus());
+    }).catch(showError);
+  </script>
+</body>
+</html>

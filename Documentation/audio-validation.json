@@ -1,0 +1,28 @@
+{
+  "title": "The Blood Warfare",
+  "success": true,
+  "tracks": [
+    {
+      "track": "ComingHome_8bit",
+      "scene": "MenuInicial",
+      "seconds": 75.12,
+      "sampleRate": 48000,
+      "channels": 2,
+      "pcmBits": 16,
+      "rms": 0.17408472047528106,
+      "originalSHA256": "44e0402bc9e1a0bde0968c958ea4559f6cfac3e4d60800d1581bef69dc2cdcd8",
+      "pcmSHA256": "8da0160914d01abba241aaa7f197ee5cb5b70d2395e199961cc40ca468be6fe6"
+    },
+    {
+      "track": "AceOfSpades_8bit",
+      "scene": "Jogo",
+      "seconds": 166.056,
+      "sampleRate": 48000,
+      "channels": 2,
+      "pcmBits": 16,
+      "rms": 0.27616791787574746,
+      "originalSHA256": "1dbc10ff34ba5756403970004a36231f24e8fcad13632f18a652b24913a32372",
+      "pcmSHA256": "89dc4af7a37a4a63d093c9b7a61f4127a21b95482b6c402d3fa63ed09d2133eb"
+    }
+  ]
+}
